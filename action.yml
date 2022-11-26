@@ -1,4 +1,4 @@
-name: "Embedme Action"
+name: "EmbedMd"
 description: "A GitHub Action for the `embedme` node package."
 inputs:
   markdown-files:
@@ -15,4 +15,5 @@ runs:
   image: 'Dockerfile'
   args:
     - "${{ inputs.markdown-files }}"
+    - "${{ inputs.commit-message }}"
 
