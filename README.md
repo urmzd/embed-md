@@ -1,4 +1,4 @@
-# EmbedMd
+# Embed Md
 
 Embed code directly into your markdown files with ease.
 
