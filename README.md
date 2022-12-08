@@ -26,3 +26,8 @@ jobs:
 
 ```
 
+## Credits
+
+Here are some of the open-source tools which make this project possible:
+
+- [embedme](https://github.com/zakhenry/embedme)
