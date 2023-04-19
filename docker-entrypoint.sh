@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
+set -e
+
 # Configure git
 git config user.name "embed-md bot"
 git config user.email "embed-md-bot@urmzd.com"
 git config pull.rebase true
 git config rebase.autoStash true
 git config --global --add safe.directory /github/workspace
-
-cd "$(git rev-parse --show-toplevel)" || echo "Not a git repo" && exit 1
 
 COMMIT_MESSAGE="$1"
 FILES="${@:2}"
