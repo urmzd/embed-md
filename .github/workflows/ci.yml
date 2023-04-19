@@ -1,8 +1,11 @@
 name: "CI"
 
 on: 
+  pull_request:
+    types: [opened, edited]
   push:
     paths:
+      - "docker-entrypoint.sh"
       - ".github/workflows/ci.yml"
       - "examples/**"
       - "README.md"
@@ -13,7 +16,7 @@ jobs:
     steps:
       - name: "Checkout current repo"
         uses: actions/checkout@v3
-      - name: "Run entrypoint script."
+      - name: "Run action"
         uses: ./
         id: "embed-code" 
         with:
