@@ -13,10 +13,18 @@ jobs:
     steps:
       - name: "Checkout current repo"
         uses: actions/checkout@v3
+      - name: "setup node"
+        uses: actions/setup-node@v3
+        with:
+          node-version: '>=20'
+      - name: "install node"
+        run: "npm ci"
+      - name: "update version"
+        run: "npx semantic-release -d"
       - name: "Build docker image"
-        run: "docker build -t urmzd/embed-md:{{version}} ."
+        run: "docker build -t urmzd/embed-md:${VERSION} ."
       - name: "Run file"
-        run: "(docker run urmzd/embed-md:{{version}} README.md description) >> output.log"
+        run: "$(docker run urmzd/embed-md:${VERSION} README.md description) >> output.log"
       - name: "Verify information"
         run: "diff output.log examples/test-output.log"
 
