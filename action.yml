@@ -1,21 +1,32 @@
 name: "embed-md"
 description: "A GitHub Action for the `embedme` node package."
 branding:
-  icon: "code"
+  icon: "file"
   color: "gray-dark"
 inputs:
   markdown-files:
     description: "The files where code should be embedded."
     required: false
     default: "README.md"
-  commit-message: 
-    description: "The message to associate with the commit containing the modified markdown files." 
+  commit-message:
+    description: "The message to associate with the commit containing the modified markdown files."
     required: false
     default: "chore: embed code within markdown files"
+  commit-author:
+    description: ""
+    required: false
+    default: "github-user@noreply.github.users.com"
+  commit-push:
+    description: ""
+    required: false
+    # options: "true" | "false", set to false when we want to skip the push
+    default: "true"
 runs:
-  using: 'docker'
-  image: 'urmzd/embed-me:{{$VERSION}}'
-  args:
-    - '${{ inputs.commit-message }}'
-    - "${{ inputs.markdown-files }}"
-
+  using: "docker"
+  # TODO: replace {{version}} with the version merged into main
+  image: "urmzd/embed-me:{{version}}"
+  env:
+    COMMIT_AUTHOR: "${{ inputs.commit-author }}"
+    COMMIT_MESSAGE: "${{ inputs.commit-message }}"
+    COMMIT_PUSH: "${{ inputs.commit-push }}"
+    MARKDOWN_FILES: "${{ inputs.markdown-files }}"

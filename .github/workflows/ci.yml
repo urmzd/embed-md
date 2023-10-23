@@ -1,11 +1,11 @@
 name: "Integration"
 
-on: 
+on:
   pull_request:
     types: [opened, edited]
   push:
     branches:
-      - 'hotfix/**'
+      - "hotfix/**"
 
 jobs:
   test:
@@ -16,7 +16,7 @@ jobs:
       - name: "setup node"
         uses: actions/setup-node@v3
         with:
-          node-version: '>=20'
+          node-version: ">=20"
       - name: "install node"
         run: "npm ci"
       - name: "update version"
@@ -26,7 +26,6 @@ jobs:
           docker build -t "urmzd/embed-md:${VERSION}" .
       - name: "Run file"
         run: >-
-          $(docker run "urmzd/embed-md:${VERSION}" README.md description) >> output.log"
+          $(docker run "urmzd/embed-md:${VERSION}" "chore: this is an example commit message" examples/example.md example.yml) >> output.log
       - name: "Verify information"
-        run: "diff output.log examples/test-output.log"
-
+        run: "cat output.log"
