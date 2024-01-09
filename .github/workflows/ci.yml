@@ -35,3 +35,6 @@ jobs:
             -e PUSH="false" \
             -e COMMIT_AUTHOR="github-actions[bot] <github-actions[bot]@users.noreply.github.com>" \
             "urmzd/embed-md:${VERSION}"
+      - name: "Assert changes on examples/example.md"
+        run: |
+          git diff --exit-code examples/example.md
