@@ -11,5 +11,15 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo the PR was merged
+      - name: Checkout repo
+        run: echo "hello"
+      - name: Set up node
+        run: echo "node"
+      - name: Run commit analyzer
+        run: echo "analye"
+      - name: "Update example.yml file"
+        run: "echo update"
+      - name: "Update action.yml image"
+        run: "echo update"
+      - name: "Push updated tag"
+        run: "echo push"

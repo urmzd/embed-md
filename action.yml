@@ -13,13 +13,12 @@ inputs:
     required: false
     default: "chore: embed code within markdown files"
   commit-author:
-    description: ""
+    description: "Define the author of the commit."
     required: false
     default: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
   commit-push:
-    description: ""
+    description: "Set to false when we want to skip the push."
     required: false
-    # options: "true" | "false", set to false when we want to skip the push
     default: "true"
 runs:
   using: "docker"
