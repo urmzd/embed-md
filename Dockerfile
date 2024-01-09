@@ -1,9 +1,10 @@
-FROM node:14
+FROM node:latest
+
 
 RUN npm install embedme -g
 
-# copy files. 
-COPY docker-entrypoint.sh docker-entrypoint.sh
+WORKDIR /app
 
-# run embedme 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+COPY entrypoint.sh entrypoint.sh
+
+ENTRYPOINT [ "/app/entrypoint.sh" ]

@@ -1,24 +1,69 @@
-name: "CI"
+name: "Integration"
 
-on: 
+on:
   pull_request:
     types: [opened, edited]
   push:
-    paths:
-      - "docker-entrypoint.sh"
-      - ".github/workflows/ci.yml"
-      - "examples/**"
-      - "README.md"
+    branches:
+      - "hotfix/**"
 
 jobs:
-  embed-example:
+  test:
+    permissions:
+      contents: write
+      pull-requests: write
+
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout current repo"
+      - name: "Checkout repo"
         uses: actions/checkout@v3
-      - name: "Run action"
-        uses: ./
-        id: "embed-code" 
+      - name: "Setup node"
+        uses: actions/setup-node@v3
         with:
-          markdown-files: "README.md" 
-          commit-message: "chore: embed example using self"
+          node-version: ">=20"
+      - name: "Install node"
+        run: "npm ci"
+      - name: "Update version"
+        run: "npx semantic-release -d"
+      - name: "Build docker image"
+        run: docker build -t "urmzd/embed-md:${VERSION}" .
+      - name: "Run action"
+        run: | 
+          docker run -v "$(pwd):/app" \
+            -e COMMIT_MESSAGE="chore: this is an example commit message" \
+            -e MARKDOWN_FILES="examples/example.md" \
+            -e PUSH="false" \
+            -e COMMIT_AUTHOR="github-actions[bot] <github-actions[bot]@users.noreply.github.com>" \
+            "urmzd/embed-md:${VERSION}"
+      - name: "Assert changes on examples/example.md"
+        run: |
+          if [[ `git diff --exit-code examples/example.md` ]]; then
+            echo "examples/example.md has been modified"
+            exit 0
+          else
+            echo "examples/example.md has not been modified"
+            exit 1
+          fi  
+      - name: Login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: "${{ secrets.DOCKER_USERNAME }}"
+          password: "${{ secrets.DOCKER_PASSWORD }}"
+      - name: "Push docker image"
+        run: docker push "urmzd/embed-md:${VERSION}"
+      - name: "Update package version"
+        continue-on-error: true
+        run: |
+          # We force the version update since directory is dirty
+          npm version -f "${VERSION}"
+      - name: "Configure git"
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - name: "Add changes"
+        run: git add package.json package-lock.json
+      - name: "Commit version changes"
+        run: >-
+          git diff --staged --quiet || git commit -m "chore: update version to ${VERSION}"
+      - name: "Push version changes"
+        run: git push origin HEAD:${GITHUB_REF#refs/heads/}

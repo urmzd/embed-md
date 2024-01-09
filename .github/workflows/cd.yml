@@ -1,0 +1,15 @@
+name: "Deployment"
+
+on:
+  # merge to master
+  push:
+    branches:
+      - main
+
+# promote the latest version
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo the PR was merged

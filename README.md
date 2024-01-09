@@ -1,4 +1,4 @@
-# Embed Md
+# Embed MD
 
 Embed code directly into your markdown files with ease.
 
@@ -18,7 +18,8 @@ jobs:
       - name: "Checkout current repo"
         uses: actions/checkout@v3
       - name: "Run entrypoint script."
-        uses: urmzd/embed-md@v1.0.0
+        # TODO: Replace the 1st capture group urmzd/embed-me@(.*) with the version merged into main.
+        uses: urmzd/embed-md@1.0.2
         id: "embed-code"
         with:
           markdown-files: "README.md"
