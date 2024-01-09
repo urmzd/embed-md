@@ -14,6 +14,10 @@ _push_changes() {
 }
 
 main () {
+
+  # Prevent dubious ownership errors.
+  git config --global --add safe.directoy "$PWD"
+
   _embed_files
   _commit_changes
 
