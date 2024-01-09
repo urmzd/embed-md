@@ -15,7 +15,7 @@ inputs:
   commit-author:
     description: ""
     required: false
-    default: "github-user@noreply.github.users.com"
+    default: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
   commit-push:
     description: ""
     required: false

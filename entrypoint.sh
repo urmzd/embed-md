@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-# Inputs.
-COMMIT_MESSAGE="${COMMIT_MESSAGE:-"Embed files"}"
-COMMIT_AUTHOR="${COMMIT_AUTHOR:-"GitHub Actions <noreply@github.com>"}"
-PUSH="${PUSH:-"false"}"
-MARKDOWN_FILES="${MARKDOWN_FILES:-"README.md"}"
-
 commit_changes() {
   git add "${MARKDOWN_FILES[@]}"
   git commit -m "$COMMIT_MESSAGE" --author="$COMMIT_AUTHOR"
