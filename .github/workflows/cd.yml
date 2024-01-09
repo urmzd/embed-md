@@ -21,5 +21,7 @@ jobs:
         run: "echo update"
       - name: "Update action.yml image"
         run: "echo update"
+      - name: "Update npm version"
+        run: "echo update"
       - name: "Push updated tag"
         run: "echo push"
