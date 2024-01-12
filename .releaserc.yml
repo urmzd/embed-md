@@ -15,7 +15,6 @@ plugins:
     - verifyReleaseCmd: |
         export VERSION="${nextRelease.version}"
 
-        if [ ! -z $GITHUB_ENV ];
-        then
-          echo $VERSION >> $GITHUB_ENV
+        if [ -n "$GITHUB_ENV" ]; then
+            echo "VERSION=$VERSION" >> "$GITHUB_ENV"
         fi
