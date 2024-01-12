@@ -35,10 +35,9 @@ jobs:
         id: action
         uses: ./
         with:
-          commit-message: "chore: this is an example commit message"
+          commit-message: "chore(release): this is an example commit message"
           markdown-files: "examples/example.md"
-          push: "false"
-          commit-author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          commit-push: "false"
       - name: "Assert changes on examples/example.md"
         run: |
           if [[ `git diff --exit-code examples/example.md` ]]; then

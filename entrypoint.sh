@@ -24,7 +24,7 @@ main () {
   _embed_files
   _commit_changes
 
-  if [[ "$PUSH" == "true" ]]; then
+  if [[ "$COMMIT_PUSH" == "true" ]]; then
     _push_changes
   fi
 }
