@@ -28,8 +28,8 @@ jobs:
       - name: "Update version"
         run: "npx semantic-release -d"
       - name: "Run action"
-        run: ./
         id: action
+        uses: ./
         with:
           commit-message: "chore: this is an example commit message"
           markdown-files: "examples/example.md"
