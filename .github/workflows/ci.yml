@@ -30,7 +30,7 @@ jobs:
       - name: Build action
         run: docker build -t "urmzd/embed-md:${VERSION}" .
       - name: Update references
-        run: ./scripts/update_version_refs
+        run: ./scripts/update_version_refs.sh
       - name: "Run action"
         id: action
         uses: ./
