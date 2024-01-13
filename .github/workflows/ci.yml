@@ -41,7 +41,7 @@ jobs:
           markdown-files: "examples/example.md"
       - name: "Assert changes on examples/example.md"
         run: |
-          if [[ `git diff --exit-code examples/example.md` ]]; then
+          if [[ `git diff --exit-code --staged examples/example.md` ]]; then
             echo "examples/example.md has been modified"
             exit 0
           else
