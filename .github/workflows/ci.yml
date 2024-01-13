@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  test:
+  integrate:
     permissions:
       contents: write
       pull-requests: write
@@ -36,8 +36,9 @@ jobs:
         uses: ./
         with:
           commit-message: "chore(release): this is an example commit message"
-          markdown-files: "examples/example.md"
+          commit-dry: "true"
           commit-push: "false"
+          markdown-files: "examples/example.md"
       - name: "Assert changes on examples/example.md"
         run: |
           if [[ `git diff --exit-code examples/example.md` ]]; then

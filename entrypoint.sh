@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-_commit_changes() {
+_stage_changes() {
   git add "${MARKDOWN_FILES[@]}"
+}
+
+_commit_changes() {
   git commit -m "$COMMIT_MESSAGE"
 }
 
@@ -21,8 +24,14 @@ _cfg() {
 
 main () {
   _cfg
+
   _embed_files
-  _commit_changes
+
+  _stage_changes
+
+  if [[ "$COMMIT_DRY" == "false"]]; then
+    _commit_changes
+  fi
 
   if [[ "$COMMIT_PUSH" == "true" ]]; then
     _push_changes

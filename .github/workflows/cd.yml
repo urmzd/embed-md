@@ -8,7 +8,7 @@ on:
       - completed
 
 jobs:
-  deployment:
+  deploy:
     runs-on: ubuntu-latest
     # The CD job should only run if the CI was successful
     if: ${{ github.event.workflow_run.conclusion == 'success' }}

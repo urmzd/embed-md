@@ -24,6 +24,10 @@ inputs:
     description: "Set to false when we want to skip the push."
     required: false
     default: "true"
+  commit-dry:
+    description: "Set to true when we want to skip the commit."
+    required: false
+    default: "false"
 runs:
   using: "docker"
   image: urmzd/embed-md:1.2.3
@@ -33,3 +37,4 @@ runs:
     COMMIT_MESSAGE: "${{ inputs.commit-message }}"
     COMMIT_PUSH: "${{ inputs.commit-push }}"
     MARKDOWN_FILES: "${{ inputs.markdown-files }}"
+    COMMIT_DRY: "${{ inputs.commit-dry }}"
