@@ -24,14 +24,14 @@ jobs:
         run: npm ci
       - name: Run commit analyzer
         run: npx semantic-release -d
+      - name: "Update references"
+        run: ./scripts/update_version_refs.sh
       - name: Run action on self
         uses: ./
         with:
           commit-message: "chore(release): bump to ${VERSION}"
           commit-push: "false"
           markdown-files: "README.md"
-      - name: "Update references"
-        run: ./scripts/update_version_refs.sh
       - name: "Update npm version"
         continue-on-error: true
         run: |
