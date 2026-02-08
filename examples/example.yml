@@ -1,19 +1,16 @@
 name: "Example"
 
-on: [release]
+on: [push]
 
 jobs:
-  embed-example:
+  embed:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: "Checkout current repo"
-        uses: actions/checkout@v3
-      - name: "Run entrypoint script."
-        uses: urmzd/embed-md@v1.2.1
-        id: "embed-code"
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Embed code into markdown"
+        uses: urmzd/embed-md@v1.4.0
         with:
           markdown-files: "README.md"
-          commit-message: "chore: embed example using self"
-          commit-name: Urmzd Mukhammadnaim
-          commit-email: <urmzd@noreply.com>
-          commit-push: "false"

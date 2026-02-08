@@ -1,46 +1,111 @@
-# Embed MD 📄➡️🔗
-Automate embedding code into markdown files with this easy-to-use GitHub Action.
+# Embed MD
 
-## Features 🌟
-- **Automatic Embedding**: Effortlessly embed code snippets.
-- **Custom Commit Options**: Personalize commit messages, author details, and push actions.
-- **Seamless Integration**: Integrates easily with GitHub workflows.
+Automate embedding code into markdown files with this GitHub Action. Uses a lightweight Rust CLI to replace tagged regions with source file contents.
 
-## Usage 🛠️
-Include Embed MD in your GitHub Actions workflow like this:
-```yaml
-# examples/example.yml
+## Syntax
 
-name: "Example"
+In your markdown files, use the following directive pair:
 
-on: [release]
-
-jobs:
-  embed-example:
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Checkout current repo"
-        uses: actions/checkout@v3
-      - name: "Run entrypoint script."
-        uses: urmzd/embed-md@v1.3.4
-        id: "embed-code"
-        with:
-          markdown-files: "README.md"
-          commit-message: "chore: embed example using self"
-          commit-name: Urmzd Mukhammadnaim
-          commit-email: <urmzd@noreply.com>
-          commit-push: "false"
-
+```markdown
+<!-- embedmd src="path/to/file.rs" -->
+<!-- /embedmd -->
 ```
 
-### Using Locally
-To use Embed MD locally:
-1. **Build Using Docker**: Build the Docker image from the Dockerfile.
-2. **Set Environment Variables**: Configure necessary environment variables like `COMMIT_MESSAGE`, `COMMIT_NAME`, etc.
-3. **Mount Desired Volumes**: Mount your project directories as volumes to the Docker container to enable Embed MD to access and modify the markdown files.
+When the action runs, the content between the tags is replaced with a fenced code block containing the referenced file:
 
-## Internal Use 🏭
+```markdown
+<!-- embedmd src="path/to/file.rs" -->
+```rust
+fn main() {
+    println!("Hello");
+}
+```
+<!-- /embedmd -->
+```
+
+- Paths are relative to the markdown file's directory.
+- The code fence language is inferred from the file extension.
+- Re-running is idempotent -- existing content between tags is replaced.
+
+## Features
+
+- **Automatic Embedding**: Embed code snippets from source files into markdown.
+- **Custom Commit Options**: Personalize commit messages, author details, and push behavior.
+- **Dry-Run Mode**: Test embedding without creating commits.
+- **Seamless Integration**: Drop into any GitHub Actions workflow.
+
+## Inputs
+
+| Name | Description | Required | Default |
+|------|-------------|----------|---------|
+| `markdown-files` | Space-separated list of markdown files to process. | No | `README.md` |
+| `commit-message` | Commit message for the embedded changes. | No | `chore: embed code within markdown files` |
+| `commit-name` | Git committer name. | No | `github-actions[bot]` |
+| `commit-email` | Git committer email. | No | `github-actions[bot]@users.noreply.github.com` |
+| `commit-push` | Whether to push after committing. | No | `true` |
+| `commit-dry` | Skip the commit (dry-run mode). | No | `false` |
+| `github-token` | GitHub token for downloading the binary. | No | `${{ github.token }}` |
+
+## Usage
+
+### Basic
+
+<!-- embedmd src="examples/example.yml" -->
+<!-- /embedmd -->
+
+### Multiple Files
+
+```yaml
+- uses: urmzd/embed-md@v1.4.0
+  with:
+    markdown-files: "README.md docs/API.md docs/GUIDE.md"
+```
+
+### Dry Run (No Commit)
+
+Useful for CI validation -- embed the files and check for drift without committing:
+
+```yaml
+- uses: urmzd/embed-md@v1.4.0
+  with:
+    commit-dry: "true"
+    commit-push: "false"
+```
+
+### CLI Usage
+
+The `embed-md` binary can also be used directly:
+
+```bash
+# Install from GitHub releases
+curl -sSfL https://github.com/urmzd/embed-md/releases/latest/download/embed-md-x86_64-unknown-linux-gnu -o /usr/local/bin/embed-md
+chmod +x /usr/local/bin/embed-md
+
+# Process files in place
+embed-md README.md docs/*.md
+
+# Check if files are up-to-date (CI mode)
+embed-md --verify README.md
+
+# Preview changes without writing
+embed-md --dry-run README.md
+```
+
+## Troubleshooting
+
+**Action fails with "nothing to commit"**
+This means no changes were needed. Ensure your markdown files contain valid `<!-- embedmd src="..." -->` directives with corresponding `<!-- /embedmd -->` closing tags.
+
+**Permission denied on push**
+The action needs `contents: write` permission. Add this to your job:
+```yaml
+permissions:
+  contents: write
+```
+
+**Files not being embedded**
+Verify the file paths in `markdown-files` are relative to the repository root and that the referenced source files exist.
+
+## Internal Use
+
 We use Embed MD in our own CI/CD pipelines, ensuring our documentation is always synchronized with the latest code.
-
-## Acknowledgements 👏
-Special thanks to the tools and people behind [embedme](https://github.com/zakhenry/embedme).
