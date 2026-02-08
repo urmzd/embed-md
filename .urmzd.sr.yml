@@ -1,0 +1,19 @@
+branches:
+  - main
+
+version_files:
+  - Cargo.toml
+
+changelog:
+  file: CHANGELOG.md
+
+commit_types:
+  chore: patch
+
+hooks:
+  pre_release:
+    - cargo test
+    - VERSION=$SR_VERSION ./scripts/update_version_refs.sh
+    - cargo build --release
+    - ./target/release/embed-md README.md
+    - git add README.md action.yml examples/example.yml

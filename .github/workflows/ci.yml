@@ -1,73 +1,61 @@
-name: "Integration"
+name: CI
 
 on:
   pull_request:
-    types: 
-      - opened
-      - edited
-  push:
-    branches:
-      - main
+    branches: [main]
+  workflow_call:
+
+env:
+  CARGO_TERM_COLOR: always
 
 jobs:
-  integrate:
-    permissions:
-      contents: write
-      pull-requests: write
-
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout repo"
-        uses: actions/checkout@v3
-      - name: "Setup node"
-        uses: actions/setup-node@v3
-        with:
-          node-version: ">=20"
-      - name: "Install node"
-        run: "npm ci"
-      - name: "Update version"
-        run: "npx semantic-release -d"
-      - name: Build action
-        run: docker build -t "urmzd/embed-md:${VERSION}" .
-      - name: Update references
-        run: ./scripts/update_version_refs.sh
-      - name: "Run action"
-        id: action
+      - uses: actions/checkout@v4
+      - uses: ludeeus/action-shellcheck@2.0.0
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test
+
+  integrate:
+    name: Integration
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Build embed-md
+        run: cargo build --release
+
+      - name: Install embed-md
+        run: cp target/release/embed-md /usr/local/bin/
+
+      - name: Run action on example
         uses: ./
         with:
-          commit-message: "chore(release): this is an example commit message"
+          markdown-files: "examples/example.md"
           commit-dry: "true"
           commit-push: "false"
-          markdown-files: "examples/example.md"
-      - name: "Assert changes on examples/example.md"
+
+      - name: Assert changes
         run: |
-          if [[ `git diff --exit-code --staged examples/example.md` ]]; then
-            echo "examples/example.md has been modified"
-            exit 0
-          else
+          if git diff --exit-code examples/example.md; then
             echo "examples/example.md has not been modified"
             exit 1
-          fi  
-      - name: Login to docker hub
-        uses: docker/login-action@v3
-        with:
-          username: "${{ secrets.DOCKER_USERNAME }}"
-          password: "${{ secrets.DOCKER_PASSWORD }}"
-      - name: "Push docker image"
-        run: docker push "urmzd/embed-md:${VERSION}"
-      - name: "Update package version"
-        continue-on-error: true
-        run: |
-          # We force the version update since directory is dirty
-          npm version -f "${VERSION}"
-      - name: "Configure git"
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-      - name: "Add changes"
-        run: git add package.json package-lock.json action.yml
-      - name: "Commit version changes"
-        run: >-
-          git diff --staged --quiet || git commit -m "chore(release): bump to ${VERSION}"
-      - name: "Push version changes"
-        run: git push origin HEAD:${GITHUB_REF#refs/heads/}
+          else
+            echo "examples/example.md has been modified"
+          fi
