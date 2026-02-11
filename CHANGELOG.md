@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1 (2026-02-11)
+
+### Miscellaneous
+
+- update Cargo.toml license to Apache-2.0 ([f451246](https://github.com/urmzd/embed-it/commit/f4512463d70c1858d4e6f9ea50300cbb252aa712))
+- license under Apache 2.0 ([762abbc](https://github.com/urmzd/embed-it/commit/762abbc86726e73289683b568d2d890066496f7d))
+
+
 ## 2.1.0 (2026-02-11)
 
 ### Features
