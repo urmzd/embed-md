@@ -28,11 +28,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
 
-      - name: Build embed-it
+      - name: Build embed-src
         run: cargo build --release
 
       - name: Update README embeddings
-        run: ./target/release/embed-it README.md
+        run: ./target/release/embed-src README.md
 
       - name: Stage generated files
         run: git add README.md action.yml example.yml

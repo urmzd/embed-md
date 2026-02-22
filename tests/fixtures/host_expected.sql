@@ -1,6 +1,6 @@
 -- Schema
--- embed-it src="example.rs"
+-- embed-src src="example.rs"
 fn main() {
     println!("Hello, world!");
 }
--- /embed-it
+-- /embed-src

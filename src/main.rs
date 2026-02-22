@@ -3,10 +3,10 @@ use std::process;
 
 use clap::Parser;
 
-use embed_it::embed::process_file;
+use embed_src::embed::process_file;
 
 #[derive(Parser)]
-#[command(name = "embed-it", about = "Embed source files into any text file")]
+#[command(name = "embed-src", about = "Embed source files into any text file")]
 struct Cli {
     /// Files to process
     #[arg(required = true)]

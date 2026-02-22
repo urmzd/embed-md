@@ -1,6 +1,6 @@
 # Sample
 
-<!-- embed-it src="example.rs" fence="auto" -->
-<!-- /embed-it -->
+<!-- embed-src src="example.rs" fence="auto" -->
+<!-- /embed-src -->
 
 Done.

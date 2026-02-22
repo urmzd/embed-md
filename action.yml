@@ -1,4 +1,4 @@
-name: "embed-it"
+name: "embed-src"
 description: "A GitHub Action that embeds source files into any text file."
 branding:
   icon: "file"
@@ -43,7 +43,7 @@ runs:
         git config user.name "${{ inputs.commit-name }}"
         git config user.email "${{ inputs.commit-email }}"
 
-    - name: Download embed-it binary
+    - name: Download embed-src binary
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
@@ -65,17 +65,17 @@ runs:
           *) echo "Unsupported OS: $OS"; exit 1 ;;
         esac
 
-        BINARY_NAME="embed-it-${TARGET}"
-        DOWNLOAD_URL="https://github.com/urmzd/embed-it/releases/latest/download/${BINARY_NAME}"
+        BINARY_NAME="embed-src-${TARGET}"
+        DOWNLOAD_URL="https://github.com/urmzd/embed-src/releases/latest/download/${BINARY_NAME}"
 
-        curl -sSfL "$DOWNLOAD_URL" -o /usr/local/bin/embed-it
-        chmod +x /usr/local/bin/embed-it
+        curl -sSfL "$DOWNLOAD_URL" -o /usr/local/bin/embed-src
+        chmod +x /usr/local/bin/embed-src
 
-    - name: Run embed-it
+    - name: Run embed-src
       shell: bash
       run: |
         # shellcheck disable=SC2086
-        embed-it ${{ inputs.files }}
+        embed-src ${{ inputs.files }}
 
     - name: Stage, commit, and push
       shell: bash

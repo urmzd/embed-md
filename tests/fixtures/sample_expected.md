@@ -1,11 +1,11 @@
 # Sample
 
-<!-- embed-it src="example.rs" fence="auto" -->
+<!-- embed-src src="example.rs" fence="auto" -->
 ```rust
 fn main() {
     println!("Hello, world!");
 }
 ```
-<!-- /embed-it -->
+<!-- /embed-src -->
 
 Done.

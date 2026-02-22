@@ -53,6 +53,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="${GITHUB_REF_NAME}"
-          cp "target/${{ matrix.target }}/release/embed-it" "embed-it-${{ matrix.target }}"
-          chmod +x "embed-it-${{ matrix.target }}"
-          gh release upload "$TAG" "embed-it-${{ matrix.target }}" --clobber
+          cp "target/${{ matrix.target }}/release/embed-src" "embed-src-${{ matrix.target }}"
+          chmod +x "embed-src-${{ matrix.target }}"
+          gh release upload "$TAG" "embed-src-${{ matrix.target }}" --clobber

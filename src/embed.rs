@@ -21,8 +21,8 @@ pub struct ProcessResult {
     pub processed: String,
 }
 
-/// Process a file: find all `embed-it src="..."` directives and replace the
-/// content between them and their closing `/embed-it` markers.
+/// Process a file: find all `embed-src src="..."` directives and replace the
+/// content between them and their closing `/embed-src` markers.
 pub fn process_file(path: &Path) -> Result<ProcessResult, String> {
     let content = std::fs::read_to_string(path)
         .map_err(|e| format!("Failed to read {}: {}", path.display(), e))?;
@@ -39,18 +39,18 @@ pub fn process_file(path: &Path) -> Result<ProcessResult, String> {
 /// Process content, resolving source paths relative to `base_dir`.
 ///
 /// Markers are comment-agnostic: any line containing
-/// `embed-it src="path"` is an opening marker, and any line containing
-/// `/embed-it` is a closing marker. This allows embedding in any file type
+/// `embed-src src="path"` is an opening marker, and any line containing
+/// `/embed-src` is a closing marker. This allows embedding in any file type
 /// (markdown, Rust, Python, YAML, etc.).
 ///
 /// By default, content is inserted raw. Use the `fence` attribute to wrap in
 /// markdown code fences: `fence` or `fence="auto"` auto-detects the language
 /// from the source extension; `fence="python"` uses an explicit language tag.
 pub fn process_content(content: &str, base_dir: &Path) -> String {
-    let open_re = Regex::new(r#"embed-it\s+src="([^"]+)"(?:\s+fence(?:="([^"]*)")?)?"#).unwrap();
-    // Match /embed-it preceded by a non-word character (space, comment chars, etc.)
-    // but not as part of a URL like "urmzd/embed-it".
-    let close_re = Regex::new(r#"(?:^|[^a-zA-Z0-9_])/embed-it\b"#).unwrap();
+    let open_re = Regex::new(r#"embed-src\s+src="([^"]+)"(?:\s+fence(?:="([^"]*)")?)?"#).unwrap();
+    // Match /embed-src preceded by a non-word character (space, comment chars, etc.)
+    // but not as part of a URL like "urmzd/embed-src".
+    let close_re = Regex::new(r#"(?:^|[^a-zA-Z0-9_])/embed-src\b"#).unwrap();
 
     let lines: Vec<&str> = content.lines().collect();
     let mut result = Vec::new();
@@ -111,7 +111,7 @@ pub fn process_content(content: &str, base_dir: &Path) -> String {
             if !found_close {
                 // No closing marker: emit remaining lines unchanged.
                 eprintln!(
-                    "Warning: no closing /embed-it found for directive at line {}",
+                    "Warning: no closing /embed-src found for directive at line {}",
                     i + 1
                 );
                 i += 1;
@@ -188,7 +188,7 @@ mod tests {
 
     #[test]
     fn missing_close_tag() {
-        let input = "<!-- embed-it src=\"foo.rs\" -->\nstale content\n";
+        let input = "<!-- embed-src src=\"foo.rs\" -->\nstale content\n";
         let result = process_content(input, Path::new("."));
         // Should leave content unchanged when no closing tag.
         assert_eq!(result, input);

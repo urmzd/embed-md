@@ -1,4 +1,4 @@
-# Embed It
+# Embed Src
 
 Embed source files into **any text file** using comment markers. Works with markdown, YAML, Python, Rust, shell scripts, and any file that supports comments.
 
@@ -8,32 +8,32 @@ Place opening and closing markers in your file using whatever comment style is a
 
 **Markdown / HTML:**
 ```markdown
-<!-- embed-it src="path/to/config.yml" -->
-<!-- /embed-it -->
+<!-- embed-src src="path/to/config.yml" -->
+<!-- /embed-src -->
 ```
 
 **Rust / JS / Go / C:**
 ```rust
-// embed-it src="path/to/utils.py"
-// /embed-it
+// embed-src src="path/to/utils.py"
+// /embed-src
 ```
 
 **Python / Shell / YAML:**
 ```python
-# embed-it src="path/to/setup.sh"
-# /embed-it
+# embed-src src="path/to/setup.sh"
+# /embed-src
 ```
 
 **CSS:**
 ```css
-/* embed-it src="path/to/theme.css" */
-/* /embed-it */
+/* embed-src src="path/to/theme.css" */
+/* /embed-src */
 ```
 
 **SQL / Lua:**
 ```sql
--- embed-it src="path/to/schema.sql"
--- /embed-it
+-- embed-src src="path/to/schema.sql"
+-- /embed-src
 ```
 
 When the tool runs, the content between the markers is replaced with the referenced file's contents.
@@ -54,13 +54,13 @@ To wrap content in markdown code fences, use the `fence` attribute:
 **Example with fencing:**
 
 ````markdown
-<!-- embed-it src="path/to/config.yml" fence="auto" -->
+<!-- embed-src src="path/to/config.yml" fence="auto" -->
 ```yaml
 server:
   host: localhost
   port: 8080
 ```
-<!-- /embed-it -->
+<!-- /embed-src -->
 ````
 
 - Paths are relative to the host file's directory.
@@ -91,7 +91,7 @@ server:
 
 ### Basic
 
-<!-- embed-it src="example.yml" fence="auto" -->
+<!-- embed-src src="example.yml" fence="auto" -->
 ```yaml
 name: "Example"
 
@@ -106,16 +106,16 @@ jobs:
       - name: "Checkout repo"
         uses: actions/checkout@v4
       - name: "Embed code into files"
-        uses: urmzd/embed-it@v1.5.0
+        uses: urmzd/embed-src@v1.5.0
         with:
           files: "README.md"
 ```
-<!-- /embed-it -->
+<!-- /embed-src -->
 
 ### Multiple Files
 
 ```yaml
-- uses: urmzd/embed-it@v2
+- uses: urmzd/embed-src@v2
   with:
     files: "README.md docs/API.md docs/GUIDE.md"
 ```
@@ -125,7 +125,7 @@ jobs:
 Useful for CI validation -- embed the files and check for drift without committing:
 
 ```yaml
-- uses: urmzd/embed-it@v2
+- uses: urmzd/embed-src@v2
   with:
     commit-dry: "true"
     commit-push: "false"
@@ -133,23 +133,23 @@ Useful for CI validation -- embed the files and check for drift without committi
 
 ### CLI Usage
 
-The `embed-it` binary can also be used directly:
+The `embed-src` binary can also be used directly:
 
 ```bash
 # Process files in place
-embed-it README.md docs/*.md
+embed-src README.md docs/*.md
 
 # Check if files are up-to-date (CI mode)
-embed-it --verify README.md
+embed-src --verify README.md
 
 # Preview changes without writing
-embed-it --dry-run README.md
+embed-src --dry-run README.md
 ```
 
 ## Troubleshooting
 
 **Action fails with "nothing to commit"**
-This means no changes were needed. Ensure your files contain valid `embed-it` markers with `src="..."` and corresponding `/embed-it` closing markers.
+This means no changes were needed. Ensure your files contain valid `embed-src` markers with `src="..."` and corresponding `/embed-src` closing markers.
 
 **Permission denied on push**
 The action needs `contents: write` permission. Add this to your job:
@@ -163,4 +163,4 @@ Verify the file paths in `files` are relative to the repository root and that th
 
 ## Internal Use
 
-We use Embed It in our own CI/CD pipelines, ensuring our documentation is always synchronized with the latest code.
+We use Embed Src in our own CI/CD pipelines, ensuring our documentation is always synchronized with the latest code.
