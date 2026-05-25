@@ -13,7 +13,7 @@ full_page = true
 
 [[scenes]]
 type = "markdown"
-name = "showcase"
+name = "after"
 path = "showcase/demo/README.after.md"
 theme = "dark"
 full_page = true

@@ -27,7 +27,7 @@
   </tr>
   <tr>
     <td align="center"><img src="showcase/before.png" alt="README with empty fsrc markers" width="400"></td>
-    <td align="center"><img src="showcase/showcase.png" alt="Running fsrc and the result" width="400"></td>
+    <td align="center"><img src="showcase/after.png" alt="README after running fsrc" width="400"></td>
   </tr>
 </table>
 
