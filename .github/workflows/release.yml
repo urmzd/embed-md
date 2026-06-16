@@ -22,7 +22,7 @@ jobs:
     outputs:
       should-release: ${{ steps.plan.outputs.bump != '' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Check for releasable commits
@@ -52,7 +52,7 @@ jobs:
             runner: macos-15
             cross: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -79,7 +79,7 @@ jobs:
           fi
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: fsrc-${{ matrix.target }}
           path: target/${{ matrix.target }}/release/fsrc
@@ -100,11 +100,11 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ secrets.SR_RELEASER_APP_ID }}
+          client-id: Iv23liUsXGDICnIdo3Ev
           private-key: ${{ secrets.SR_RELEASER_PRIVATE_KEY }}
           repositories: ${{ github.event.repository.name }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
@@ -119,7 +119,7 @@ jobs:
         run: ./target/release/fsrc run README.md
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
 
